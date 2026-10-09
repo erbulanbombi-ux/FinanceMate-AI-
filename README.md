@@ -1,7 +1,4 @@
-# <h1>
-  <img src="./logo.png" alt="FinMate Logo" width="32" height="32" style="vertical-align: middle;">
-  FinMate — Personal Finance, Simplified
-</h1> FinMate — Personal Finance, Simplified
+# 🚀 FinMate — Personal Finance, Simplified
 
 **Understand your money. Decide with confidence.**
 
@@ -12,7 +9,7 @@
 ---
 
 ## 🎬 Demo & Video
-- **Vimeo Demo Video:** https://vimeo.com/1234143311?share=copy&fl=sv&fe=ci
+- **YouTube Demo Video:** [Watch the Demo](https://youtube.com) *(Insert your YouTube link here)*
 
 ---
 
