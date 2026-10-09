@@ -1,4 +1,7 @@
-# 🚀 FinMate — Personal Finance, Simplified
+# <h1>
+  <img src="./logo.png" alt="FinMate Logo" width="32" height="32" style="vertical-align: middle;">
+  FinMate — Personal Finance, Simplified
+</h1> FinMate — Personal Finance, Simplified
 
 **Understand your money. Decide with confidence.**
 
