@@ -17,49 +17,6 @@ class APIModel(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
 
-class AuthCredentials(APIModel):
-    username: str = Field(min_length=3, max_length=64, pattern=r"^[A-Za-z0-9_.-]+$")
-    email: str = Field(min_length=6, max_length=254, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-    password: str = Field(min_length=12, max_length=128)
-
-    @field_validator("username")
-    @classmethod
-    def normalize_username(cls, value: str) -> str:
-        return value.strip().lower()
-
-    @field_validator("email")
-    @classmethod
-    def normalize_email(cls, value: str) -> str:
-        return value.strip().lower()
-
-
-class LoginCredentials(APIModel):
-    username: str = Field(min_length=3, max_length=64, pattern=r"^[A-Za-z0-9_.-]+$")
-    password: str = Field(min_length=1, max_length=128)
-
-    @field_validator("username")
-    @classmethod
-    def normalize_username(cls, value: str) -> str:
-        return value.strip().lower()
-
-
-class EmailRequest(APIModel):
-    email: str = Field(min_length=6, max_length=254, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-
-    @field_validator("email")
-    @classmethod
-    def normalize_email(cls, value: str) -> str:
-        return value.strip().lower()
-
-
-class TokenRequest(APIModel):
-    token: str = Field(min_length=32, max_length=256)
-
-
-class PasswordResetRequest(TokenRequest):
-    password: str = Field(min_length=12, max_length=128)
-
-
 class TransactionCreate(APIModel):
     """A transaction supplied by the frontend. Amounts are always positive."""
 

@@ -24,7 +24,6 @@ export const setMockMode = (enabled) => {
 // Create Axios Instance
 const apiClient = axios.create({
   timeout: 15000,
-  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -44,13 +43,6 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      if (
-        error.response.status === 401 &&
-        !error.config?.url?.includes('/api/auth/login')
-      ) {
-        window.dispatchEvent(new Event('finmate:auth-expired'));
-      }
-
       // Backend returned 4xx or 5xx
       const detail =
         error.response.data?.detail ||

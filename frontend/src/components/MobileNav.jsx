@@ -126,7 +126,7 @@ export default function MobileNav({ onOpenSettings }) {
 
           <div className="flex items-center space-x-2 px-1 text-xs text-slate-400">
             <User className="w-4 h-4 text-indigo-400" />
-            <span>Signed in as <strong className="text-white">{currentUser?.username}</strong></span>
+            <span>Demo profile <strong className="text-white">{currentUser?.username}</strong></span>
           </div>
         </div>
       </div>

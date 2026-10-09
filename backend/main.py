@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 
 from backend.agent.agent import FinanceAgent
 from backend.agent.tools import FinanceTools
-from backend.api.auth import router as auth_router
 from backend.api.budget import router as budget_router
 from backend.api.chat import router as chat_router
 from backend.api.dashboard import router as dashboard_router
@@ -18,8 +17,6 @@ from backend.api.transactions import router as transactions_router
 from backend.database.database import FinanceDatabase
 from backend.services.analytics import FinancialAnalytics
 from backend.services.anomaly_detection import AnomalyDetectionService
-from backend.services.auth import AuthService
-from backend.services.email import EmailService
 from backend.services.budget import BudgetService
 from backend.services.forecasting import ForecastingService
 from backend.services.simulation import PurchaseSimulationService
@@ -32,8 +29,6 @@ load_dotenv(Path(__file__).resolve().parent / ".env")
 async def lifespan(app: FastAPI):
     database = FinanceDatabase(Path(os.getenv("FINANCE_DATABASE_PATH", "data/finance.db")))
     await database.initialize()
-    email = EmailService()
-    auth = AuthService(database, email)
     transactions = TransactionService(database)
     analytics = FinancialAnalytics(database, transactions)
     budgets = BudgetService(database, transactions)
@@ -78,8 +73,6 @@ async def lifespan(app: FastAPI):
         provider_base_url=provider_base_url,
     )
     app.state.database = database
-    app.state.auth = auth
-    app.state.email = email
     app.state.transactions = transactions
     app.state.analytics = analytics
     app.state.budgets = budgets
@@ -107,15 +100,13 @@ allowed_origins = [
     ).split(",")
     if origin.strip()
 ]
-app.state.allowed_origins = allowed_origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
-app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(transactions_router)
 app.include_router(budget_router)

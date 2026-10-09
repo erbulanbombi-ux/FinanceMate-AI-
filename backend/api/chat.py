@@ -2,23 +2,17 @@ from __future__ import annotations
 
 import math
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 
-from backend.api.auth import require_current_user
 from backend.database.models import ChatRequest, ChatResponse, FinanceAnalysisRequest
 
 router = APIRouter(prefix="/api", tags=["AI agent"])
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat(
-    payload: ChatRequest,
-    request: Request,
-    current_user: dict = Depends(require_current_user),
-) -> ChatResponse:
+async def chat(payload: ChatRequest, request: Request) -> ChatResponse:
     try:
-        user_id = current_user["user_id"]
-        result = await request.app.state.agent.chat(user_id, payload.message)
+        result = await request.app.state.agent.chat(payload.user_id, payload.message)
     except Exception as exc:
         # Keep provider credentials and raw error details out of the frontend response.
         if getattr(exc, "status_code", None) == 402 and request.app.state.agent.provider == "gemini":
@@ -30,7 +24,7 @@ async def chat(
         raise HTTPException(status_code=502, detail=detail) from exc
     insights = []
     try:
-        anomalies = await request.app.state.anomalies.detect(user_id)
+        anomalies = await request.app.state.anomalies.detect(payload.user_id)
         insights.extend(
             f"{row['category']} +{row['increase_percent']}% vs. recent average"
             for row in anomalies
@@ -48,7 +42,6 @@ async def chat(
 async def analyze_finance(
     payload: FinanceAnalysisRequest,
     request: Request,
-    current_user: dict = Depends(require_current_user),
 ) -> dict:
     daily_target_savings = math.ceil(
         payload.target_price / (payload.time_frame_months * 30)
@@ -65,7 +58,7 @@ async def analyze_finance(
         f"Daily target savings: {daily_target_savings}"
     )
     try:
-        result = await request.app.state.agent.chat(current_user["user_id"], message)
+        result = await request.app.state.agent.chat("default", message)
     except Exception as exc:
         if getattr(exc, "status_code", None) == 402 and request.app.state.agent.provider == "gemini":
             detail = "Gemini API credits are depleted. Check billing in Google AI Studio."

@@ -46,7 +46,6 @@ export default function Simulator() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify({
           monthly_income: Number(monthlyIncome),
           daily_expenses: Number(dailyExpenses),

@@ -115,7 +115,7 @@ export default function Sidebar({ onOpenSettings }) {
             </div>
             <div>
               <p className="max-w-32 truncate text-xs font-semibold text-slate-200">{username}</p>
-              <p className="text-[10px] text-slate-500">Signed in</p>
+              <p className="text-[10px] text-slate-500">Demo profile</p>
             </div>
           </div>
           <button
